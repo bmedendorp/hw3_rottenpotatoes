@@ -1,6 +1,7 @@
 # Add a declarative step here for populating the DB with movies.
 
 Given /the following movies exist/ do |movies_table|
+  Movie.delete_all
   movies_table.hashes.each do |movie|
     # each returned element will be a hash whose key is the table header.
     # you should arrange to add that movie to the database here.
@@ -30,4 +31,8 @@ When /I (un)?check the following ratings: (.*)/ do |uncheck, rating_list|
   rating_list.split(', ').each do |rating|
     uncheck ? uncheck("ratings_#{rating}") : check("ratings_#{rating}")
   end
+end
+
+Then /^I should see all of the movies$/ do
+  page.all('table#movies tr').count.should == 11
 end
